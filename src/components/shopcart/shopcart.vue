@@ -73,7 +73,9 @@
                                         <inputnumber :goodsCount="item.buycount" :goodsId="item.id" @goodsCountChange="getChangeGoods"></inputnumber>
                                     </td>
                                     <td width="104" align="left">{{item.sell_price * item.buycount}}</td>
-                                    <td width="54" align="center">操作</td>
+                                    <td width="54" align="center">
+                                        <a href="javascript:void(0)" @click="deleteGoodsById(item.id)">删除</a>
+                                    </td>
                                 </tr>
                                 <tr v-if="goodsList.length == 0">
                                     <td colspan="10">
@@ -191,6 +193,26 @@
                 })
 
                 this.$store.commit('updateGoods', goods)
+            },
+            deleteGoodsById(goodsId){
+                
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    
+                    const index = this.goodsList.findIndex(item=>{
+                        return item.id == goodsId
+                    })
+
+                    this.goodsList.splice(index,1)
+
+                    this.$store.commit('deleteGoodsById',goodsId)
+                }).catch(() => {
+                    console.log("---取消了---")          
+                });
+                
             }
         }
     }    

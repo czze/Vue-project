@@ -48,7 +48,8 @@ const router = new VueRouter({
 import {
     addLocalGoods,
     getTotalLocalCount,
-    updateLocalGoods
+    updateLocalGoods,
+    deleteLocalGoodsById
 } from './common/localStorageHelper'
 const store = new Vuex.Store({
     state:{
@@ -61,7 +62,6 @@ const store = new Vuex.Store({
             }else{
                 return getTotalLocalCount()
             }
-            
         }
     },
     mutations: {
@@ -73,7 +73,11 @@ const store = new Vuex.Store({
         },
         updateGoods(state,goods){
             state.buyCount = updateLocalGoods(goods);
+        },
+        deleteGoodsById(state,goodsId){
+            state.buyCount = deleteLocalGoodsById(goodsId);
         }
+
     }
 })
 

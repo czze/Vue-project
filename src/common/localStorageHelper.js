@@ -46,3 +46,14 @@ export const updateLocalGoods = (goods) =>{
     return getTotalLocalCount();
 
 }
+
+export const deleteLocalGoodsById = (goodsId) => {
+
+    const localGoodsObj = getLocalGoodsObj();
+
+    delete localGoodsObj[goodsId];
+
+    localStorage.setItem(KEY,JSON.stringify(localGoodsObj));
+
+    return getTotalLocalCount();
+}
