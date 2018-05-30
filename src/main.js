@@ -8,6 +8,7 @@ import moment from 'moment'
 import ElementUI from 'element-ui';
 
 import axios from "axios"
+axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://47.106.148.205:8899/"
 
 //模仿vue-rresource
@@ -36,14 +37,41 @@ import "./statics/site/css/style.css"
 import goodslist from "./components/goods/goodslist.vue"
 import goodsinfo from "./components/goods/goodsinfo.vue"
 import shopcart from "./components/shopcart/shopcart.vue"
+import order from "./components/order/order.vue"
+import login from "./components/account/login.vue"
 const router = new VueRouter({
     routes:[
         {path:'/',redirect:'/site/goodslist'},
         {path:'/site/goodslist',component:goodslist},
         {path:'/site/goodsinfo/:goodsId',component:goodsinfo},
-        {path:'/site/shopcart',component:shopcart}
+        {path:'/site/shopcart',component:shopcart},
+        {path:'/site/order/:ids',component:order,meta:{needLogin:true}},
+        {path:'/site/login',component:login}
     ]
 })
+
+
+router.beforeEach((to,from,next)=>{
+    if(to.path!='/site/login'){
+        // console.log(to.path)
+        localStorage.setItem('lastVisitPath',to.path)
+    }
+
+    if(to.meta.needLogin){
+        
+        axios.get('site/account/islogin').then(response=>{
+            // console.log(response.data)
+            if(response.data.code == 'nologin'){
+                router.push({path:"/site/login"})
+            }else{
+                next();
+            }
+        })
+    }else{
+        next();
+    }
+})
+
 
 import {
     addLocalGoods,

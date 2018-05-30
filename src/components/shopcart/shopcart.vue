@@ -106,8 +106,8 @@
                     <!--购物车底部-->
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                            <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button>
-                            <button class="submit" onclick="formSubmit(this, '/', '/shopping.html');">立即结算</button>
+                            <button class="button" @click="continueBuy">继续购物</button>
+                            <button class="submit" @click="goToOrder">立即结算</button>
                         </div>
                     </div>
                     <!--购物车底部-->
@@ -213,7 +213,33 @@
                     console.log("---取消了---")          
                 });
                 
+            },
+
+            continueBuy(){
+                this.$router.push({path:'/site/goodslist'})
+            },
+
+            goToOrder(){
+                const tempArray = [];
+                this.goodsList.forEach(item=>{
+                    if(item.isSelected){
+                        tempArray.push(item.id)
+                    }
+                })
+
+                if(tempArray.length==0){
+                    this.$message({
+                        message: '请至少选择一件商品来下单',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                //console.log(tempArray)
+
+                this.$router.push({path:`/site/order/${tempArray.join(',')}`});
+
             }
+
         }
     }    
 

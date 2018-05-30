@@ -11,16 +11,16 @@
                         <a target="_blank" href="#"></a>
                     </div>
                     <div id="menu" class="right-box">
-                        <span style="display: none;">
-                            <a href="" class="">登录</a>
+                        <span v-show="!isLogin">
+                            <router-link to="/site/login" class="">登录</router-link>
                             <strong>|</strong>
                             <a href="" class="">注册</a>
                             <strong>|</strong>
                         </span>
-                        <span>
+                        <span v-show="isLogin">
                             <a href="" class="">会员中心</a>
                             <strong>|</strong>
-                            <a>退出</a>
+                            <a @click="logout">退出</a>
                             <strong>|</strong>
                         </span>
                         <router-link to="/site/shopcart" class="">
@@ -128,7 +128,46 @@
 <script>
     // import $ from 'jquery';
 
+    import bus from './common/commonvue.js'
+
     export default {
+        data(){
+            return{
+                isLogin:false
+            }
+        },
+        created(){
+            bus.$on('loginSuccess',(isLogin)=>{
+                this.isLogin = isLogin;
+            })
+
+            this.checkIsLogin();
+        },
+        methods:{
+            checkIsLogin(){
+                const url = 'site/account/islogin'
+                this.$axios.get(url).then(response=>{
+                    if(response.data.code == 'nologin'){
+                        this.isLogin = false
+                    }else{
+                        this.isLogin = true
+                    }
+                })
+            },
+            logout(){
+                const url = 'site/account/logout'
+                this.$axios.get(url).then(response=>{
+                    if(response.data.status==1){
+                        this.$message.error(response.data.message);
+                        return
+                    }
+
+                    this.isLogin = false;
+
+                    this.$router.push({path:'/site/goodslist'})
+                })
+            }
+        },
         mounted(){
             $("#menu2 li a").wrapInner( '<span class="out"></span>' );
             $("#menu2 li a").each(function() {
