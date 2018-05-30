@@ -69,7 +69,9 @@
                                         </div>
                                     </td>
                                     <td width="84" align="left">{{item.sell_price}}</td>
-                                    <td width="104" align="center">{{item.buycount}}</td>
+                                    <td width="104" align="center">
+                                        <inputnumber :goodsCount="item.buycount" :goodsId="item.id" @goodsCountChange="getChangeGoods"></inputnumber>
+                                    </td>
                                     <td width="104" align="left">{{item.sell_price * item.buycount}}</td>
                                     <td width="54" align="center">操作</td>
                                 </tr>
@@ -124,11 +126,16 @@
 <script>
     import {getLocalGoodsObj} from "../../common/localStorageHelper.js"
 
+    import inputnumber from "../subcomponent/inputnumber.vue"
+
     export default {
         data(){
             return{
                 goodsList:[],
             }
+        },
+        components: {
+            inputnumber
         },
         computed:{
             getTotalCount(){
@@ -158,7 +165,7 @@
         methods:{
             getGoodsListData(){
                 const localGoodsObj = getLocalGoodsObj();
-                console.log(localGoodsObj);
+                //console.log(localGoodsObj);
 
                 const tempArray = [];
                 for(const key in localGoodsObj){
@@ -173,6 +180,17 @@
                     })
                     this.goodsList = response.data.message
                 })
+            },
+            getChangeGoods(goods){
+                console.log(goods);
+
+                this.goodsList.forEach(item=>{
+                    if(item.id==goods.goodsId){
+                        item.buycount=goods.count
+                    }
+                })
+
+                this.$store.commit('updateGoods', goods)
             }
         }
     }    

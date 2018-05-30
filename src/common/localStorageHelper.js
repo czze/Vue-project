@@ -34,3 +34,15 @@ export const addLocalGoods = (goods) => {
     return getTotalLocalCount();
 
 }
+
+export const updateLocalGoods = (goods) =>{
+
+    const localGoodsObj = getLocalGoodsObj();
+
+    localGoodsObj[goods.goodsId] = goods.count;
+
+    localStorage.setItem(KEY,JSON.stringify(localGoodsObj));
+
+    return getTotalLocalCount();
+
+}
