@@ -39,6 +39,8 @@ import goodsinfo from "./components/goods/goodsinfo.vue"
 import shopcart from "./components/shopcart/shopcart.vue"
 import order from "./components/order/order.vue"
 import login from "./components/account/login.vue"
+import payOrder from "./components/pay/payOrder.vue"
+import paySuccess from "./components/pay/paySuccess.vue"
 const router = new VueRouter({
     routes:[
         {path:'/',redirect:'/site/goodslist'},
@@ -46,7 +48,9 @@ const router = new VueRouter({
         {path:'/site/goodsinfo/:goodsId',component:goodsinfo},
         {path:'/site/shopcart',component:shopcart},
         {path:'/site/order/:ids',component:order,meta:{needLogin:true}},
-        {path:'/site/login',component:login}
+        {path:'/site/login',component:login},
+        {path:'/site/payOrder/:orderId',component:payOrder,meta:{needLogin:true}},
+        {path:'/site/paySuccess/:orderId',component:paySuccess,meta:{needLogin:true}}
     ]
 })
 
